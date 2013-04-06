@@ -35,10 +35,16 @@ connected_at(Depth, X, Z) :-
         Next is Depth - 1,
         connected(X, Y),
         connected_at(Next, Y, Z),
-        X \= Z,
-        X \= Y,
         not(connected(X, Z)),
-        not(connected_at(Next, X, Z)).
+        not(connected_earlier(Next, X, Z)),
+        X \= Z.
+
+connected_earlier(0, _, _) :- !, false.
+
+connected_earlier(Depth, X, Y) :-
+        connected_at(Depth, X, Y);
+        Next is Depth - 1,
+        connected_earlier(Next, X, Y).
 
 write_connections(X) :-
         write_out([X]),
